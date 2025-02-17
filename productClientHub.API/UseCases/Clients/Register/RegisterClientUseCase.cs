@@ -1,4 +1,5 @@
-﻿using ProductClientHub.Communication.Requests;
+﻿using productClientHub.Exceptions.ExceptionsBase;
+using ProductClientHub.Communication.Requests;
 using ProductClientHub.Communication.Responses;
 
 namespace productClientHub.API.UseCases.Clients.Register
@@ -13,7 +14,9 @@ namespace productClientHub.API.UseCases.Clients.Register
 
             if (result.IsValid == false)
             {
-                throw new ArgumentException("Erro nos dados recebidos");
+                var errors = result.Errors.Select(failure => failure.ErrorMessage).ToList();
+
+                throw new ErrorOnValidationException(errors);
             }
 
             return new ResponseClientJson();
